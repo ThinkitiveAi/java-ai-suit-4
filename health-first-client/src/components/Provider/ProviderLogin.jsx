@@ -171,7 +171,7 @@ const ProviderLogin = () => {
           {success && <div className="provider-login-success">Login successful! Redirecting…</div>}
         </form>
         <div className="provider-login-footer">
-          <span>New provider? <Link to="/register" className="provider-login-link">Register here</Link></span>
+          <span>New provider? <Link to="/provider-register" className="provider-login-link">Register here</Link></span>
           <span><a href="/support" className="provider-login-link">Support</a> | <a href="/privacy" className="provider-login-link">Privacy Policy</a></span>
         </div>
       </div>

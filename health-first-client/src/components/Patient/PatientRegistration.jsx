@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import './PatientRegistration.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 const COUNTRIES = ['United States', 'Canada', 'United Kingdom', 'India', 'Australia', 'Other'];
@@ -88,19 +90,81 @@ const PatientRegistration = () => {
       setPhotoPreview(URL.createObjectURL(file));
     }
   };
+
   // Form submit
-  const handleSubmit = e => {
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   const errs = validate();
+  //   setErrors(errs);
+  //   if (Object.keys(errs).length) return;
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     setSuccess(true);
+  //     setTimeout(() => setSuccess(false), 2000);
+  //   }, 1500);
+  // };
+
+  const handleSubmit = async e => {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length) return;
+
     setLoading(true);
-    setTimeout(() => {
+
+    const payload = {
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email,
+      phoneNumber: form.phoneNumber,
+      password: form.password,
+      confirmPassword: form.confirmPassword,
+      dateOfBirth: form.dateOfBirth,
+      gender: form.gender,
+      address: {
+        street: form.street,
+        city: form.city,
+        state: form.state,
+        zip: form.zip
+      },
+      emergencyContact: {
+        name: form.emergencyName,
+        phone: form.emergencyPhone,
+        relationship: form.emergencyRelationship
+      },
+      medicalHistory: [], // or form.medicalHistory
+      insuranceInfo: {
+        provider: form.insuranceProvider || "",
+        policyNumber: form.policyNumber || ""
+      }
+    };
+
+    try {
+      const response = await axios.post(
+        'http://192.168.0.112:8080/api/v1/patient/register',
+        JSON.stringify(payload),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
       setLoading(false);
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 2000);
-    }, 1500);
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      setLoading(false);
+      if (err.response?.data?.message) {
+        setErrors({ submit: err.response.data.message });
+      } else {
+        setErrors({ submit: 'Registration failed. Please try again.' });
+      }
+    }
   };
+
 
   return (
     <div className="patient-reg-bg">
@@ -250,6 +314,7 @@ const PatientRegistration = () => {
           </label>
           {errors.privacy && <div className="patient-reg-error">{errors.privacy}</div>}
         </div>
+        {errors.submit && <div className="patient-reg-error">{errors.submit}</div>}
         {success && <div className="patient-reg-success">Registration successful! Please check your email for verification and next steps.</div>}
         <button type="submit" className="patient-reg-btn" disabled={loading} aria-busy={loading}>
           {loading ? <span className="patient-reg-spinner"></span> : 'Register'}
