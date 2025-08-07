@@ -102,7 +102,7 @@ const ProviderRegistration = () => {
         if (k === 'photo' && v) data.append('photo', v);
         else if (k !== 'photo') data.append(k, v);
       });
-      await axios.post('/api/provider/register', data, {
+      await axios.post('https://86721ef8cdb1.ngrok-free.app/api/v1/provider/register', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSuccess(true);

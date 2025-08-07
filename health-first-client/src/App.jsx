@@ -1,10 +1,11 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home.jsx';
-import ProviderLogin from './components/ProviderLogin.jsx';
-import ProviderRegistration from './components/ProviderRegistration.jsx';
-import PatientLogin from './components/PatientLogin.jsx';
-import PatientRegistration from './components/PatientRegistration.jsx';
+import ProviderLogin from './components/Provider/ProviderLogin.jsx';
+import ProviderRegistration from './components/Provider/ProviderRegistration.jsx';
+import PatientLogin from './components/Patient/PatientLogin.jsx';
+import PatientRegistration from './components/Patient/PatientRegistration.jsx';
+import PatientDashboard from './components/Patient/PatientDashboard.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/provider-register" element={<ProviderRegistration />} />
         <Route path="/patient-login" element={<PatientLogin />} />
         <Route path="/patient-register" element={<PatientRegistration />} />
+        <Route path="/patient-dashboard" element={<PatientDashboard />} />
       </Routes>
     </Router>
   );
