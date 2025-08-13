@@ -33,10 +33,13 @@ public class SecurityConfig {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated()
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/api-docs/**",    
+                "/swagger-ui/**",
+                "/swagger-ui.html"
+            ).permitAll()
+            .anyRequest().authenticated()
             );
         
         // Fix for H2 console frame options
